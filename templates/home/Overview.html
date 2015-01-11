@@ -1,0 +1,135 @@
+﻿<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- Fit multiple devices -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Tab title -->
+  <title> DLR - Des‌ign Learning Repository</title>
+
+  <!-- Standard zurb foundation css -->
+  <link rel="stylesheet" type="text/css" href="{% static 'css/foundation.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'css/normalize.min.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'css/custom.css' %}" />
+
+  <!-- Used to handle older browser versions -->
+  <script src="{% static 'js/modernizr.js' %}"></script>
+</head>
+<body>
+ <!-- Used for stickey footer -->
+ <div class="wrapper">
+<!-- Navigation -->
+  <nav class="top-bar" data-topbar data-options="is_hover: false"> 
+    <ul class="title-area"> 
+      <li class="name"><h1><a href="/">DLR</a></h1></li> 
+      <li class="toggle-topbar menu-icon"><a href=""><span>Menu</span></a></li>
+    </ul> 
+    <section class="top-bar-section"> 
+    <!-- Right Nav Section --> 
+      <ul class="right"> 
+        <li class="has-dropdown">
+          <a href="#">Sign up</a> 
+            <ul class="dropdown"> 
+               <li><a href="/instructor-signup">Instructors Start Here!</a></li>
+               <li><a href="/student-signup">Students Start Here!</a></li> 
+            </ul> 
+        </li>
+	<li><a href="/login">Login</a></li>  
+      </ul> 
+    <!-- Left Nav Section --> 
+      <ul class="left" id="tabs">
+        <li class="active" id="overview"><a>Overview</a></li>
+        <li id="examples"><a>Examples</a></li>
+        <li id="about"><a>About</a></li>
+        <li id="support"><a>Support</a></li>      
+      </ul> 
+    </section> 
+  </nav>
+  <div class="row" id="overviewcontent" style="display:block">
+    <div class="large-12 columns">
+      <!-- Overview tab -->
+      <div class="row" style="text-align:center;">
+        <div class="small-12 large-12 columns">
+	  <h1><b>Seamlessly Integrate Reflective Design Education Into Your Curriculum</b></h1>
+          <h3>The DLR is a free tool that allows instructors to search, access and contribute challenge problems, as well as archive and view the student-generated responses. </h3>
+	  <hr>
+        </div>
+      </div>
+      <div class="row" style="text-align:center;">
+	<div class="small-12 large-4 columns">
+	  <div class="panel overview-panel">
+	    <h3>Search, Access, and Contribute Design Challenges</h3>
+            <p> Design Challenges are open-ended problems, designed to allow students to learn through discovery. Based on the learning objectives of a specific course, these problems promote the independent exploration of a variety of design decisions without an instructor providing a correct answer.  
+	    </p>
+	  </div>
+	</div>
+	<div class="small-12 large-4 columns">
+	  <div class="panel overview-panel">
+	    <h3>Administer Design Challenges to Your Courses</h3>
+            <p>The DLR allows instructors to conduct activities for their courses. These activities have an associated Design Challenge, which can be administered to students for easy distribution and collection of results. 
+	    </p>
+	  </div>
+	</div>
+	<div class="small-12 large-4 columns">
+	  <div class="panel overview-panel">
+	    <h3>Archive and Review Student-Generated Design Stories</h3>
+            <p> Design stories are narratives that are created after solving a particular Design Challenge. These stories follow a specific reflection framework, and discuss several aspects of the design space, such as functional requirements and alternatives to the solutions. 
+	    </p>
+	  </div>
+	</div>
+      </div>
+    </div>
+  </div><!-- Overview content -->
+  <!-- Example content -->
+  <div class="row" id="examplescontent" style="display:none">
+    <div class="large-12 columns">
+      <h1>Examples coming soon!</h1>
+    </div>
+  </div>
+  <!-- About content -->
+  <div class="row" id="aboutcontent" style="display:none">
+    <div class="large-12 columns">
+      <h1>About coming soon!</h1>
+    </div>
+  </div>
+  <!-- Support content -->
+  <div class="row" id="supportcontent" style="display:none">
+    <div class="large-12 columns">
+      <h1>Support coming soon!</h1>
+    </div>
+  </div>
+  <div class="push"></div>
+ </div>
+ <div class="footer">
+   <div class="row">
+     <p style="color:white;">&copy; Northern Arizona University 2013.</p>
+   </div>
+ </div>
+  <!-- Javascript -->
+  <script src="{% static 'js/jquery.js' %}"></script>
+  <script src="{% static 'js/foundation.min.js' %}"></script>
+  <!-- Settings for zurb foundation -->
+  <script type="text/javascript">
+    $(document).foundation();
+    //Change active tab, and load content based on selected tab
+    $("#tabs li").on('click',function() {
+ 	if(!($(this).hasClass('active'))) {
+		//Get current tab for fade out
+		var currentContentId = '#' + $('#tabs .active').attr('id') + 'content'; 
+		//Clear active tab
+		$('#tabs .active').removeClass('active');
+		//fade out the current content
+		$(currentContentId).fadeOut(.05);
+		//Set the clicked tab to active
+		$(this).addClass('active'); 
+
+		//Get the id of the appropriate content based on the tab selected
+		//fade in the new content
+		$('#' + this.id + 'content').fadeIn('slow');
+	} 
+    });
+  </script>
+</body>
+</html>

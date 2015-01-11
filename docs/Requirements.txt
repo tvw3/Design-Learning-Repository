@@ -1,0 +1,3 @@
+This file contains the software and package requirements for this application
+Python == 3.X
+Django == 1.7

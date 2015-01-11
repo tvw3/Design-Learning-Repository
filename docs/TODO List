@@ -1,0 +1,7 @@
+1) Do registration and login in views (make sure to use the class based views this time)
+...
+Once all apps are completed, make changes for production.
+The following list is what has been recognized as requiring changes so far:
+a) Change root directory and compile static files
+b) Turn debug to false
+c) Write up README
