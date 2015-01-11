@@ -1,5 +1,5 @@
 # Design-Learning-Repository
 
-The design learning repository is a tool to support NSF-funded research led by Dr. John Georgas of Northern Arizona Univerisity.
+The design learning repository is a tool intended to aid in research of an NSF funded project led by Dr. John Georgas of Northern Arizona University
 
-All rights reserved - Northern Arizona Univeristy 2014
+All Rights Reserved - Northern Arizona University 
