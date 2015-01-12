@@ -42,29 +42,29 @@ def userLogin(request):
 			#sign in if their account is active
 			if user.is_active:
 				login(request, user)
-				return HttpResponse('/redirect')
+				return HttpResponseRedirect('/redirect')
 			else:
 				template = loader.get_template('Login.html')
 				context = RequestContext(request, {'message': True,
-												'messageContents': 'Your account has been deactivated. Please contact an administrator.',
-												'csrf_token': csrf(request),})
+					'messageContents': 'Your account has been deactivated. Please contact an administrator.',
+					'csrf_token': csrf(request),})
 				return HttpResponse(template.render(context))
 		else:
-			#Failed to authenticate user, notify with username/password error message
+			#Failed to authenticate user, notify with username/password error messages
 			template = loader.get_template('Login.html')
 			context = RequestContext(request,{'message': True,
-											  'messageContents': 'Invalid username or password. Please try again',
-											  'csrf_token':csrf(request),})
+			  	'messageContents': 'Invalid username or password. Please try again',
+			  	'csrf_token':csrf(request),})
 			return HttpResponse(template.render(context))
 
 def userLogout(request):
 	'''
-	userLogout(request) - the handler for logging out a suer
+	userLogout(request) - the handler for logging out a user
 	Parameters:
 		request - an Http request
 	'''
 	logout(request)
-	HttpResponseRedirect('/')
+	return HttpResponseRedirect('/')
 
 def forgotPassword(request):
 	'''
