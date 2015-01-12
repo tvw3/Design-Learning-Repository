@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.template import RequestContext, loader
 
 from django.core.context_processors import csrf
+from django.core.mail import send_mail
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
@@ -10,6 +11,15 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
 
 from registration_login.models import UserProfile
+
+from DLR.settings import EMAIL_HOST_USER
+
+import random
+import string
+
+passwordRecoverString = '''The DLR account associated with this email 
+	has requested a password recovery. Below is your account name and new temporary password:
+	\nusername: %s\npassword: %s'''
 
 def userLogin(request):	
 	'''
@@ -99,7 +109,20 @@ def forgotPassword(request):
 
 def recoverPassword(request, username):
 	'''
-
+	recoverPassword(request, username) - Handler for user password recovery. While this method
+	for recovering a password probably isn't the most secure, it it suitable given the lack of
+	intimate details about our users.
+	Parameters:
+		request - an http request
+		username - the username for the account of the user in need of password recovery
+	Variable:
+		template - the tempalted RecoverPassword.html file
+		context - The RequestContext object (state of the template). Dictionary values are:
+			message - boolean of wheter a message is to be passed
+			messageContents - the message to be printed to the user
+			question - the security question to be answered
+			csrf_token- Used in POST, must have the associated value returned by csrf(update)
+		answer - the user's answer to the security question
 	'''
 	if request.method == 'GET':
 		#result is a query set, select the first item
@@ -111,7 +134,33 @@ def recoverPassword(request, username):
 			'csrf_token': csrf(request)})
 		return HttpResponse(template.render(context))
 	elif request.method == 'POST':
-		pass
+		answer = request.POST['answer']
+		#get the user 
+		user = User.objects.filter(username=username)[0]
+		#check if they answered the security question correctly
+		if answer == user.userprofile.security_answer:
+			#they did, send them an email containing their new, random password
+			password = ''.join(random.choice(string.ascii_uppercase + string.digits) for i in range(8))
+			#save the new password
+			user.set_password(password)
+			user.save()
+			send_mail('DLR Password Reset',
+				passwordRecoverString % (user.username, password),
+				EMAIL_HOST_USER,
+				(user.email,),
+				fail_silently=False)
+			return HttpResponseRedirect('/recover-password/success')
+		else:
+			#they did not, inform  them that the 
+			template = loader.get_template('registration_login/RecoverPassword.html')
+			context = RequestContext(request, {'message': True,
+			'messageContents': 'Invalid response, please try again.',
+			'question': user.userprofile.get_security_question_display(),
+			'csrf_token': csrf(request)})
+			return HttpResponse(template.render(context))
+			
+
+
 
 
 
