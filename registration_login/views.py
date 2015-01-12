@@ -42,13 +42,15 @@ def userLogin(request):
 			#sign in if their account is active
 			if user.is_active:
 				login(request, user)
-				#TODO CHANGEEVERYTHING BELOW THIS POINT FOR THIS FUNCTION
-				logout(request)
 				return HttpResponse('It worked')
 			else:
 				return HttpResponse('didntwork')
 		else:
 			return HttpResponse('didnt work')
+
+def userLogout(request):
+	logout(request)
+	HttpResponseRedirect('/')
 
 def forgotPassword(request):
 	'''
