@@ -14,7 +14,7 @@ from registration_login.models import UserProfile
 def userLogin(request):	
 	'''
 	UserLogin(request) - view handler for logging into the app
-	Arguments:
+	Parameters:
 	    request - an http request
 	Variables:
 	    template - the templated Login.html file
@@ -42,20 +42,34 @@ def userLogin(request):
 			#sign in if their account is active
 			if user.is_active:
 				login(request, user)
-				return HttpResponse('It worked')
+				return HttpResponse('/redirect')
 			else:
-				return HttpResponse('didntwork')
+				template = loader.get_template('Login.html')
+				context = RequestContext(request, {'message': True,
+												'messageContents': 'Your account has been deactivated. Please contact an administrator.',
+												'csrf_token': csrf(request),})
+				return HttpResponse(template.render(context))
 		else:
-			return HttpResponse('didnt work')
+			#Failed to authenticate user, notify with username/password error message
+			template = loader.get_template('Login.html')
+			context = RequestContext(request,{'message': True,
+											  'messageContents': 'Invalid username or password. Please try again',
+											  'csrf_token':csrf(request),})
+			return HttpResponse(template.render(context))
 
 def userLogout(request):
+	'''
+	userLogout(request) - the handler for logging out a suer
+	Parameters:
+		request - an Http request
+	'''
 	logout(request)
 	HttpResponseRedirect('/')
 
 def forgotPassword(request):
 	'''
 	forgotPassword(request) - view handler for beginning password recovery
-	Arguments:
+	Parameters:
 	    request - an http request
 	Variables:
 	    template - the templated ForgotPassword.html file
