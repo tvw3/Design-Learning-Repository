@@ -19,14 +19,14 @@ class UserProfile(models.Model):
 	#affiliated institution
 	Institution = models.ForeignKey(Institution, null=True)
 	#used for recovering password if forgotten
-	SECURITY_QUESTIONS = (
+	SECURITY_QUESTIONS = [
 			('teacher','What was the last name of your favorite grade teacher?'),
 			('book','What was the first book you ever read?'),
 			('pet','What was the name of your first pet?'),
 			('father','In what city was your father born?'),
 			('mother','In what city was your mother born?'),
 			('car','What was the color of your first car?'),
-		)
+		]
 	security_question = models.CharField(max_length=7, choices=SECURITY_QUESTIONS, default='pet')
 	security_answer = models.CharField(max_length=50, null=True)
 	#whether or not a student or instructorhas given permission to use materials for research

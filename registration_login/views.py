@@ -44,14 +44,14 @@ def userLogin(request):
 				login(request, user)
 				return HttpResponseRedirect('/redirect')
 			else:
-				template = loader.get_template('Login.html')
+				template = loader.get_template('registration_login/Login.html')
 				context = RequestContext(request, {'message': True,
 					'messageContents': 'Your account has been deactivated. Please contact an administrator.',
 					'csrf_token': csrf(request),})
 				return HttpResponse(template.render(context))
 		else:
 			#Failed to authenticate user, notify with username/password error messages
-			template = loader.get_template('Login.html')
+			template = loader.get_template('registration_login/Login.html')
 			context = RequestContext(request,{'message': True,
 			  	'messageContents': 'Invalid username or password. Please try again',
 			  	'csrf_token':csrf(request),})
@@ -107,7 +107,7 @@ def recoverPassword(request, username):
 		template = loader.get_template('registration_login/RecoverPassword.html')
 		context = RequestContext(request, {'message': False,
 			'messageContents': None,
-			'question': UserProfile.SECURITY_QUESTIONS(user.userprofile.security_question),
+			'question': user.userprofile.get_security_question_display(),
 			'csrf_token': csrf(request)})
 		return HttpResponse(template.render(context))
 	elif request.method == 'POST':

@@ -18,3 +18,7 @@ html, body {
 .overview-panel {
     height:350px;
 }
+p.error {
+	color:red;
+	font-size: 26px;
+}
