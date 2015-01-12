@@ -31,6 +31,7 @@ STATICFILES_DIRS = (
 SECRET_KEY = ')y(e__dcg!mj2^lhx7=6q%ww3&y19jsf0=)d$4z5_qpu%e42bl'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+
 DEBUG = True
 
 TEMPLATE_DEBUG = True
@@ -88,7 +89,12 @@ USE_L10N = True
 
 USE_TZ = True
 
-
-
+#Test email account
+#CHANGE THIS PRIOR TO PRODUCTION
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'dlrtestemail@gmail.com'
+EMAIL_HOST_PASSWORD = 'mypassport'
+EMAIL_PORT = 587
 
 
