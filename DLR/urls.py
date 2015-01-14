@@ -6,6 +6,7 @@ urlpatterns = patterns('',
     url(r'^login/', 'registration_login.views.userLogin', name='login'),
     url(r'^logout/', 'registration_login.views.userLogout', name='logout'),
     url(r'^forgot-password/', 'registration_login.views.forgotPassword', name='forgot-password'),
-    url(r'^recover-password/(?P<username>\w+)/', 'registration_login.views.recoverPassword', name='recover-password'),
+    url(r'^reset-password/(?P<username>\w+)/', 'registration_login.views.resetPassword', name='reset-password'),
+    url(r'^reset-password-success/', 'registration_login.views.resetPasswordSuccess', name='reset-success'),
     url(r'^admin/', include(admin.site.urls)),
 )

@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, render_to_response
 
 from django.template import RequestContext, loader
 
@@ -17,9 +17,9 @@ from DLR.settings import EMAIL_HOST_USER
 import random
 import string
 
-passwordRecoverString = '''The DLR account associated with this email 
-	has requested a password recovery. Below is your account name and new temporary password:
-	\nusername: %s\npassword: %s'''
+passwordRecoverString = 'The DLR account associated with this email' + \
+	' has requested a password recovery. Below is your account name and new temporary password:' + \
+	'\n\nusername: %s\npassword: %s'
 
 def userLogin(request):	
 	'''
@@ -99,7 +99,7 @@ def forgotPassword(request):
 	elif request.method == 'POST':
 		username = request.POST['username']
 		if User.objects.filter(username=username).exists():
-			return HttpResponseRedirect('/recover-password/%s' % (username))
+			return HttpResponseRedirect('/reset-password/%s' % (username))
 		else:
 			template = loader.get_template('registration_login/ForgotPassword.html')
 			context = RequestContext(request, {'message': True,
@@ -107,7 +107,7 @@ def forgotPassword(request):
 				'csrf_token': csrf(request)})
 			return HttpResponse(template.render(context))
 
-def recoverPassword(request, username):
+def resetPassword(request, username):
 	'''
 	recoverPassword(request, username) - Handler for user password recovery. While this method
 	for recovering a password probably isn't the most secure, it it suitable given the lack of
@@ -127,7 +127,7 @@ def recoverPassword(request, username):
 	if request.method == 'GET':
 		#result is a query set, select the first item
 		user = User.objects.filter(username=username)[0]
-		template = loader.get_template('registration_login/RecoverPassword.html')
+		template = loader.get_template('registration_login/ResetPassword.html')
 		context = RequestContext(request, {'message': False,
 			'messageContents': None,
 			'question': user.userprofile.get_security_question_display(),
@@ -149,16 +149,23 @@ def recoverPassword(request, username):
 				EMAIL_HOST_USER,
 				(user.email,),
 				fail_silently=False)
-			return HttpResponseRedirect('/recover-password/success')
+			return HttpResponseRedirect('/reset-password-success')
 		else:
 			#they did not, inform  them that the 
-			template = loader.get_template('registration_login/RecoverPassword.html')
+			template = loader.get_template('registration_login/ResetPassword.html')
 			context = RequestContext(request, {'message': True,
 			'messageContents': 'Invalid response, please try again.',
 			'question': user.userprofile.get_security_question_display(),
 			'csrf_token': csrf(request)})
 			return HttpResponse(template.render(context))
 			
+def resetPasswordSuccess(request):
+	'''
+	resetPasswordSuccess(request) - Simple handler that renders the success template
+	Parameters:
+		request - an Http Request
+	'''
+	return render_to_response('registration_login/PasswordResetSuccess.html')
 
 
 

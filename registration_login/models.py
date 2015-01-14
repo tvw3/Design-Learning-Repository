@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-#The institution with which a student or instructor is affiliated with
+#The institution with which a student or instructor is affiliated 
 class Institution(models.Model):
 	name = models.CharField(max_length=100)
 	city = models.CharField(max_length=50)
