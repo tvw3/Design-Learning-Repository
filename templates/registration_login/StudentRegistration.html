@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- Fit multiple devices -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Tab title -->
+  <title>DLR - Design Learning Repository</title>
+
+  <link rel="stylesheet" type="text/css" href="{% static 'css/foundation.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'css/normalize.css' %}" />
+
+  <!-- Used to handle older browser versions -->
+  <script src="{% static 'js/modernizr.js' %}"></script>
+</head>
+<body>
+<!-- Navigation -->
+  <nav class="top-bar" data-topbar data-options="is_hover: false"> 
+    <ul class="title-area"> 
+      <li class="name"><h1><a href="/">DLR</a></h1></li> 
+      <li class="toggle-topbar menu-icon"><a href=""><span>Menu</span></a></li>
+    </ul> 
+    <section class="top-bar-section"> 
+    <!-- Right Nav Section --> 
+      <ul class="right">
+	<li><a href="/">Return to Overview</a></li>  
+        <li class="has-dropdown">
+          <a href="#">Sign up</a> 
+            <ul class="dropdown"> 
+               <li><a href="/instructor-registration">Instructors Start Here!</a></li>
+               <li><a href="/student-registration">Students Start Here!</a></li> 
+            </ul> 
+        </li>
+	<li><a href="/login">Login</a></li> 
+      </ul> 
+    </section> 
+  </nav>
+ <div class="wrapper">
+ <div class="container" style="text-align:center;">
+  <h1>Student Registration</h1>
+  <form method="post">
+    {% csrf_token %}
+    <div class="row">
+      <div class="small-12 large-8 large-offset-2 columns" style="text-align:center;">
+      <div class="panel">
+        <fieldset>
+          <legend>User Information</legend>
+          <input type="text" placeholder="First Name" name="firstname" value="{{firstname}}" required autofocus/><br/>
+          <input type="text" placeholder="Last Name" name="lastname" value="{{lastname}}" required/><br/>
+          <input type="text" placeholder="Email" name="email" value="{{email}}" required/><br/>
+	        <select name="institution_id">
+	         {% for entry in institutions %}
+	           <option value="{{entry.id}}">{{ entry.name }}</option>
+	         {% endfor %}
+          </select>
+        </fieldset>
+        <fieldset>
+	       <legend>Account Information</legend>
+  	       {% if message %}
+	           <h4 style="color:red;">{{messageContents}}</h4>
+	         {% endif %}
+            <input type="text" placeholder="Username" name="username" value="{{username}}" required/><br/>
+            <input type="password" id="pw1" onkeyup="checkPassword(); return false" placeholder="Password" name="pwd" value="{{pwd}}" required/><br/>
+	           <h4>Re-enter password:</h4>
+            <input class="error" type="password" id="pw2" onkeyup="checkPassword(); return false" placeholder="Password" required/> 
+	         <small class="error" id="confirmMessage" style="background-color:#c60f13;">Passwords do not match!</small>  
+	       </fieldset>
+         <label for"reseachApproval">I give permission to use the materials that I submit for research in order to improve the processes and experiences for future students</label>
+         <input id="researchApproval" type="checkbox">
+      </div> 
+      </div>
+    </div>
+    <input class="button" type="submit" id="registerButton" value="Register" disabled style="width:250px"/>   
+  </form>
+ </div>
+ <div class="push"></div>
+ </div>
+ <div class="footer">
+   <div class="row">
+     <p style="color:white;">&copy; Northern Arizona University 2013</p>
+   </div>
+ </div>
+  <!-- javascript -->
+  <script src="{% static 'js/jquery.js' %}"></script>
+  <script src="{% static 'js/foundation.min.js' %}"></script>
+  <script type="text/javascript">
+    $(document).foundation();
+    //verifies that the password and password confirmation match
+    //If the passwords do match, then allow the user to click the register button
+    function checkPassword() {
+      var pw1 = document.getElementById("pw1");
+      var pw2 = document.getElementById("pw2");
+      var message = document.getElementById("confirmMessage");
+      var btn = document.getElementById("registerButton")
+      //Check they match and are not empty strings
+      if((pw1.value == pw2.value) && (pw1.value.length > 0) && (pw2.value.length > 0)) {
+        message.style.background = "#5da423";
+        message.innerHTML = "Passwords match!"
+        btn.disabled = false
+      } else {
+        message.style.background = "#c60f13"
+        message.innerHTML = "Passwords do not match!" 
+        btn.disabled = true   
+      }
+    }
+  </script>
+</body>
+</html>

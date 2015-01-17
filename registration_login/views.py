@@ -10,7 +10,7 @@ from django.contrib.auth.models import User
 
 from django.http import HttpResponse, HttpResponseRedirect
 
-from registration_login.models import UserProfile
+from registration_login.models import UserProfile, Institution
 
 from DLR.settings import EMAIL_HOST_USER
 
@@ -166,6 +166,34 @@ def resetPasswordSuccess(request):
 		request - an Http Request
 	'''
 	return render_to_response('registration_login/PasswordResetSuccess.html')
+
+def studentRegistration(request):
+	'''
+	studentSignup(request) - view handler for instructor registration
+	Arguments:
+	    request - a http request
+	Variables:
+	    template - the templated Login.html file
+	    context - the RequestContext object. Dictionary values are:
+	        message- boolean of whether a message is to be passed. Leave empty
+	                    if message
+	        messageContents - The message to be printed
+	        csrf_token - Used in POST, must have the associated value of
+	                    csrf(update)
+	    user - user object what will be saved to profile
+	    group - user group that the user will be added to
+	    profile - UserProfile object, the link between users and institutions
+	    institutions - a query set of all institutions, used to show registered
+	                    institutions to user
+	'''    
+	if request.method == 'GET':
+		institutions = Institution.objects.all().order_by('name')
+		template = loader.get_template('registration_login/studentRegistration.html')
+		context = RequestContext(request, {'csrf_token': csrf(request),
+			'institutions':institutions,})
+		return HttpResponse(template.render(context))
+	elif request.method == 'POST':
+		pass
 
 
 
