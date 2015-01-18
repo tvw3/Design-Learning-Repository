@@ -65,9 +65,17 @@
             <input type="password" id="pw1" onkeyup="checkPassword(); return false" placeholder="Password" name="pwd" value="{{pwd}}" required/><br/>
 	           <h4>Re-enter password:</h4>
             <input class="error" type="password" id="pw2" onkeyup="checkPassword(); return false" placeholder="Password" required/> 
-	         <small class="error" id="confirmMessage" style="background-color:#c60f13;">Passwords do not match!</small>  
-	       </fieldset>
-         <label for"reseachApproval">I give permission to use the materials that I submit for research in order to improve the processes and experiences for future students</label>
+	         <small class="error" id="confirmMessage" style="background-color:#c60f13;">Passwords do not match!</small>
+	         <label>Select a security question for use in password recovery</label> 
+	         <select name="question_id">
+         		{% for question in security_questions %}
+         			<option value="{{question.0}}">{{question.1}}</option>
+         		{% endfor %}
+	         </select ><br/><br/>
+	         <label>Provide an an answer for the security question above</label>
+	         <input type="text" placeholder="Answer" name="answer" value="{{answer}}" required/>
+	       </fieldset><br/>
+         <label for="reseachApproval">I give permission to use the materials that I submit for research in order to improve the processes and experiences for future students</label>
          <input id="researchApproval" type="checkbox">
       </div> 
       </div>

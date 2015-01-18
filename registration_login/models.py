@@ -20,7 +20,7 @@ class UserProfile(models.Model):
 	Institution = models.ForeignKey(Institution, null=True)
 	#used for recovering password if forgotten
 	SECURITY_QUESTIONS = (
-			('teacher','What was the last name of your favorite grade teacher?'),
+			('teacher','What was the last name of your favorite grade school teacher?'),
 			('book','What was the first book you ever read?'),
 			('pet','What was the name of your first pet?'),
 			('father','In what city was your father born?'),

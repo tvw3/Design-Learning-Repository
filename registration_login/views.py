@@ -138,7 +138,7 @@ def resetPassword(request, username):
 		#get the user 
 		user = User.objects.filter(username=username)[0]
 		#check if they answered the security question correctly
-		if answer == user.userprofile.security_answer:
+		if answer.lower() == user.userprofile.security_answer:
 			#they did, send them an email containing their new, random password
 			password = ''.join(random.choice(string.ascii_uppercase + string.digits) for i in range(8))
 			#save the new password
@@ -188,9 +188,11 @@ def studentRegistration(request):
 	'''    
 	if request.method == 'GET':
 		institutions = Institution.objects.all().order_by('name')
+		security_questions = UserProfile.SECURITY_QUESTIONS
 		template = loader.get_template('registration_login/studentRegistration.html')
 		context = RequestContext(request, {'csrf_token': csrf(request),
-			'institutions':institutions,})
+			'institutions':institutions,
+			'security_questions': security_questions,})
 		return HttpResponse(template.render(context))
 	elif request.method == 'POST':
 		pass
