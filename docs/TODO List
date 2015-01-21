@@ -2,6 +2,12 @@
 ...
 Once all apps are completed, make changes for production.
 The following list is what has been recognized as requiring changes so far:
+
+Forms may be changed to use Django’s built in forms (I discovered them after I had already done quite a bit of coding).
+
+Build base templates to make templates more easily maintainable
+
+Other things do 
 a) Change root directory and compile static files
 b) Turn debug to false
 c) Write up README

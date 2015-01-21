@@ -6,9 +6,11 @@ from django.core.context_processors import csrf
 from django.core.mail import send_mail
 
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 
 from django.http import HttpResponse, HttpResponseRedirect
+
+from django.db import IntegrityError
 
 from registration_login.models import UserProfile, Institution
 
@@ -135,7 +137,8 @@ def resetPassword(request, username):
 		return HttpResponse(template.render(context))
 	elif request.method == 'POST':
 		answer = request.POST['answer']
-		#get the user 
+		#returns a queryset, so get the first (only) object in the set
+		#otherwise the queryset object will be returned rather than the user object
 		user = User.objects.filter(username=username)[0]
 		#check if they answered the security question correctly
 		if answer.lower() == user.userprofile.security_answer:
@@ -185,6 +188,8 @@ def studentRegistration(request):
 	    profile - UserProfile object, the link between users and institutions
 	    institutions - a query set of all institutions, used to show registered
 	                    institutions to user
+        security_questions - the security questions that a user can choose for password reset
+        				which are defined in the UserProfile model
 	'''    
 	if request.method == 'GET':
 		institutions = Institution.objects.all().order_by('name')
@@ -195,7 +200,38 @@ def studentRegistration(request):
 			'security_questions': security_questions,})
 		return HttpResponse(template.render(context))
 	elif request.method == 'POST':
-		pass
+		try:
+			#Use form inputs to create a new User
+			user = User.objects.create_user(request.POST['username'],request.POST['email'],request.POST['pwd'])
+			#Fill out the rest of the attributes
+			user.last_name = request.POST['lastname']
+			user.first_name = request.POST['firstname']
+			#Add the user to the student group
+			group = Group.objects.get(name='Student')
+			group.user_set.add(user)
+			user.save()
+			user.userprofile.institution = Institution.objects.get(id=request.POST['institution_id'])
+			#Set the selected security question, as well as the answer for that question
+			user.userprofile.security_question = request.POST['question_id']
+			user.userprofile.security_answer = request.POST['answer']
+			#Set if the student agreed to let their materials be used in research
+			if 'research' in request.POST:
+				user.userprofile.permission_granted = True
+			else:
+				user.userprofile.permission_granted = False
+			user.userprofile.save()
+			return HttpResponseRedirect('/student-registration-success')
+			#username entered is already in use
+		except IntegrityError as e:
+		    institutions = Institution.objects.all().order_by('name')
+		    template = loader.get_template('registration_login/studentRegistration.html')
+		    context = RequestContext(request,{'institutions':institutions,
+		                                      'message':True,
+		                                      'messageContents':'Username already in use',
+		                                        'csrf_token':csrf(request),})
+		    return HttpResponse(template.render(context))
+	
+
 
 
 

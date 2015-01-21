@@ -17,7 +17,7 @@ class Institution(models.Model):
 class UserProfile(models.Model):
 	user = models.OneToOneField(User)
 	#affiliated institution
-	Institution = models.ForeignKey(Institution, null=True)
+	institution = models.ForeignKey(Institution, null=True)
 	#used for recovering password if forgotten
 	SECURITY_QUESTIONS = (
 			('teacher','What was the last name of your favorite grade school teacher?'),
