@@ -9,5 +9,6 @@ urlpatterns = patterns('',
     url(r'^reset-password/(?P<username>\w+)/', 'registration_login.views.resetPassword', name='reset-password'),
     url(r'^reset-password-success/', 'registration_login.views.resetPasswordSuccess', name='reset-success'),
     url(r'^student-registration/', 'registration_login.views.studentRegistration', name='student-registration'),
+    url(r'^instructor-registration/', 'registration_login.views.instructorRegistration', name='instructor-registration'),
     url(r'^admin/', include(admin.site.urls)),
 )

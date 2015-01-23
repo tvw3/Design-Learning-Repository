@@ -197,6 +197,8 @@ def studentRegistration(request):
 		template = loader.get_template('registration_login/studentRegistration.html')
 		context = RequestContext(request, {'csrf_token': csrf(request),
 			'institutions':institutions,
+			'message': False,
+			'messageContents': None,
 			'security_questions': security_questions,})
 		return HttpResponse(template.render(context))
 	elif request.method == 'POST':
@@ -213,7 +215,7 @@ def studentRegistration(request):
 			user.userprofile.institution = Institution.objects.get(id=request.POST['institution_id'])
 			#Set the selected security question, as well as the answer for that question
 			user.userprofile.security_question = request.POST['question_id']
-			user.userprofile.security_answer = request.POST['answer']
+			user.userprofile.security_answer = request.POST['answer'].lower()
 			#Set if the student agreed to let their materials be used in research
 			if 'research' in request.POST:
 				user.userprofile.permission_granted = True
@@ -228,9 +230,20 @@ def studentRegistration(request):
 		    context = RequestContext(request,{'institutions':institutions,
 		                                      'message':True,
 		                                      'messageContents':'Username already in use',
-		                                        'csrf_token':csrf(request),})
+		                                      'csrf_token':csrf(request),})
 		    return HttpResponse(template.render(context))
-	
+
+def instructorRegistration(request):
+	if request.method == 'GET':
+		institutions = Institution.objects.all().order_by('name')
+		template = loader.get_template('registration_login/instructorRegistration.html')
+		context = RequestContext(request,{'institutions':institutions,
+	                                      'message': False,
+	                                      'messageContents': None,
+	                                      'csrf_token':csrf(request),})
+		return HttpResponse(template.render(context))
+	elif request.method == 'POST':
+		pass
 
 
 
