@@ -172,7 +172,7 @@ def resetPasswordSuccess(request):
 
 def studentRegistration(request):
 	'''
-	studentSignup(request) - view handler for instructor registration
+	studentRegistration(request) - view handler for instructor registration
 	Arguments:
 	    request - a http request
 	Variables:
@@ -199,22 +199,22 @@ def studentRegistration(request):
 			'institutions':institutions,
 			'message': False,
 			'messageContents': None,
-			'security_questions': security_questions,})
+			'securityQuestions': security_questions,})
 		return HttpResponse(template.render(context))
 	elif request.method == 'POST':
 		try:
 			#Use form inputs to create a new User
 			user = User.objects.create_user(request.POST['username'],request.POST['email'],request.POST['pwd'])
 			#Fill out the rest of the attributes
-			user.last_name = request.POST['lastname']
-			user.first_name = request.POST['firstname']
+			user.last_name = request.POST['lastName']
+			user.first_name = request.POST['firstName']
 			#Add the user to the student group
 			group = Group.objects.get(name='Student')
 			group.user_set.add(user)
 			user.save()
-			user.userprofile.institution = Institution.objects.get(id=request.POST['institution_id'])
+			user.userprofile.institution = Institution.objects.get(id=request.POST['institutionID'])
 			#Set the selected security question, as well as the answer for that question
-			user.userprofile.security_question = request.POST['question_id']
+			user.userprofile.security_question = request.POST['questionID']
 			user.userprofile.security_answer = request.POST['answer'].lower()
 			#Set if the student agreed to let their materials be used in research
 			#if research does not exist in post, then the checkbox wasnt marked
@@ -243,17 +243,90 @@ def studentRegistrationSuccess(request):
 	return render_to_response('registration_login/studentRegistrationSuccess.html')
 
 def instructorRegistration(request):
+	'''
+	instructorRegistration(request) - view handler for instructor registration
+	Arguments:
+	    request - a http request
+	Variables:
+	    template - the templated Login.html file
+	    context - the RequestContext object. Dictionary values are:
+	        message- boolean of whether a message is to be passed. Leave empty
+	                    if message
+	        messageContents - The message to be printed
+	        csrf_token - Used in POST, must have the associated value of
+	                    csrf(update)
+	    user - user object what will be saved to profile
+	    group - user group that the user will be added to
+	    profile - UserProfile object, the link between users and institutions
+	    institutions - a query set of all institutions, used to show registered
+	                    institutions to user
+        security_questions - the security questions that a user can choose for password reset
+        				which are defined in the UserProfile model
+	''' 
 	if request.method == 'GET':
 		institutions = Institution.objects.all().order_by('name')
+		security_questions = UserProfile.SECURITY_QUESTIONS()
 		template = loader.get_template('registration_login/instructorRegistration.html')
 		context = RequestContext(request,{'institutions':institutions,
 	                                      'message': False,
 	                                      'messageContents': None,
-	                                      'csrf_token':csrf(request),})
+	                                      'csrf_token':csrf(request),
+	                                      'securityQuestions':security_questions})
 		return HttpResponse(template.render(context))
 	elif request.method == 'POST':
-		pass
+		try:
+			#create a new user from the post info
+			user = User.objects.create_user(request.POST['username'],
+				request.POST['email'],
+				request.POST['pwd'])
+			#set the rest of the user's information
+			user.first_name = request.POST['firstName']
+			user.last_name = request.POST['lastName']
+			#Instructors must be manually approved
+			#Requires user groups to be setup prior to user registration
+			group = Group.objects.get(name='Instructor-pending')
+			group.user_set.add(user)
+			user.save()
+			#set institution, if the instructor is adding a new one, then create the institution first before adding
+			#check to make sure that the add institutio checkbox was checked
+			if 'createSchool' in request.POST:
+				inst_object = Institution()
+				inst_object.name = request.POST['instName']
+				inst_object.city = request.POST['city']
+				inst_object.state = request.POST['state']
+				inst_object.country = request.POST['country']
+			else:
+				inst_object = Institution.objects.get(id=request.POST['institutionID'])
+			user.userprofile.institution = inst_object
+			#Set the selected security question, as well as the answer for that question
+			user.userprofile.security_question = request.POST['questionID']
+			user.userprofile.security_answer = request.POST['answer'].lower()
+			#Set if the instructor agreed to let their materials be used in research
+			#if research does not exist in post, then the checkbox wasnt marked
+			if 'research' in request.POST:
+				user.userprofile.permission_granted = True
+			else:
+				user.userprofile.permission_granted = False
+			user.userprofile.save()
+			return HttpResponseRedirect('/instructor-registration-success')
+		except IntegrityError as e:
+			institutions = Institution.objects.all().order_by('name')
+			security_questions = UserProfile.SECURITY_QUESTIONS()
+			template = loader.get_template('registration_login/instructorRegistration.html')
+			context = RequestContext(request,{'institutions':institutions,
+		                                      'message': True,
+		                                      'messageContents': 'Username already in use',
+		                                      'csrf_token':csrf(request),
+		                                      'securityQuestions':security_questions})
+			return HttpResponse(template.render(context))
 
+def instructorRegistrationSuccess(request):
+	'''
+	instructorRegistrationSuccess(request) - Simple handler that renders the success template
+	Parameters:
+		request - an Http Request
+	'''
+	return render_to_response('registration_login/instructorRegistrationSuccess.html')
 
 
 
