@@ -217,6 +217,7 @@ def studentRegistration(request):
 			user.userprofile.security_question = request.POST['question_id']
 			user.userprofile.security_answer = request.POST['answer'].lower()
 			#Set if the student agreed to let their materials be used in research
+			#if research does not exist in post, then the checkbox wasnt marked
 			if 'research' in request.POST:
 				user.userprofile.permission_granted = True
 			else:
@@ -232,6 +233,14 @@ def studentRegistration(request):
 		                                      'messageContents':'Username already in use',
 		                                      'csrf_token':csrf(request),})
 		    return HttpResponse(template.render(context))
+
+def studentRegistrationSuccess(request):
+	'''
+	studentRegistrationSuccess(request) - Simple handler that renders the success template
+	Parameters:
+		request - an Http Request
+	'''
+	return render_to_response('registration_login/studentRegistrationSuccess.html')
 
 def instructorRegistration(request):
 	if request.method == 'GET':

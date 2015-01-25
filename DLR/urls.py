@@ -10,5 +10,6 @@ urlpatterns = patterns('',
     url(r'^reset-password-success/', 'registration_login.views.resetPasswordSuccess', name='reset-success'),
     url(r'^student-registration/', 'registration_login.views.studentRegistration', name='student-registration'),
     url(r'^instructor-registration/', 'registration_login.views.instructorRegistration', name='instructor-registration'),
+    url(r'^student-registration-success/' ,'registration_login.views.studentRegistrationSuccess', name='student-registration-success'),
     url(r'^admin/', include(admin.site.urls)),
 )
