@@ -1,4 +1,6 @@
-1) Do registration and login in views (make sure to use the class based views this time)
+CURRENT MODULE: COURSE
+	current task: create db models for a course
+	future tasks: build course handlers and templates
 ...
 Once all apps are completed, make changes for production.
 The following list is what has been recognized as requiring changes so far:
@@ -11,3 +13,6 @@ Other things do
 a) Change root directory and compile static files
 b) Turn debug to false
 c) Write up README
+
+****SUPER IMPORTANT****
+Be sure to change the key, email account prior to pushing to openshift vm
