@@ -341,7 +341,10 @@ def approvalPending(request):
 
 def loginRedirect(request):
 	'''
-
+	loginRedirect(request) - redirects the user to the proper home page based on user permission. If the
+	user requesting the page is not authenticated, then redirect to the home page
+	Parameters:
+		request - an Http request
 	'''
 	#make sure a valid user is logged in
 	if request.user.is_authenticated():

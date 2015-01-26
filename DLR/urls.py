@@ -11,5 +11,8 @@ urlpatterns = patterns('',
     url(r'^student-registration/', 'registration_login.views.studentRegistration', name='student-registration'),
     url(r'^instructor-registration/', 'registration_login.views.instructorRegistration', name='instructor-registration'),
     url(r'^student-registration-success/' ,'registration_login.views.studentRegistrationSuccess', name='student-registration-success'),
+    url(r'^instructor-registration-success/', 'registration_login.views.instructorRegistrationSuccess', name='instructor-registration-success'),
+    url(r'^approval-pending/', 'registration_login.views.approvalPending', name='approval-pending'),
+    url(r'^redirect/', 'registration_login.views.loginRedirect',name='redirect'),
     url(r'^admin/', include(admin.site.urls)),
 )
