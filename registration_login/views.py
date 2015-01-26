@@ -19,13 +19,16 @@ from DLR.settings import EMAIL_HOST_USER
 import random
 import string
 
+#This is the string that will be sent to users when they need to reset their password.
+#The two arguments passed to this string should be the username and the password
 passwordRecoverString = 'The DLR account associated with this email' + \
 	' has requested a password recovery. Below is your account name and new temporary password:' + \
 	'\n\nusername: %s\npassword: %s'
 
 def userLogin(request):	
 	'''
-	UserLogin(request) - view handler for logging into the app
+	UserLogin(request) - Login page. If login information is incorrect, or the user has been deactivated, then
+	appropriate error messages are displayed.
 	Parameters:
 	    request - an http request
 	Variables:
@@ -71,7 +74,7 @@ def userLogin(request):
 
 def userLogout(request):
 	'''
-	userLogout(request) - the handler for logging out a user
+	userLogout(request) - Simply used to logout the user and then redirect them to the home page
 	Parameters:
 		request - an Http request
 	'''
@@ -80,7 +83,8 @@ def userLogout(request):
 
 def forgotPassword(request):
 	'''
-	forgotPassword(request) - view handler for beginning password recovery
+	forgotPassword(request) - Page for password reset. Asks for a username in order to retrieve the security question to be used in
+	the resetPassword handler.
 	Parameters:
 	    request - an http request
 	Variables:
@@ -111,9 +115,9 @@ def forgotPassword(request):
 
 def resetPassword(request, username):
 	'''
-	recoverPassword(request, username) - Handler for user password recovery. While this method
-	for recovering a password probably isn't the most secure, it it suitable given the lack of
-	intimate details about our users.
+	recoverPassword(request, username) - Handler for user password recovery. Asks the user the security question associated with
+	the account attached to username. While this method for recovering a password probably isn't the most secure, 
+	it it suitable given the lack of intimate details about our users.
 	Parameters:
 		request - an http request
 		username - the username for the account of the user in need of password recovery
@@ -164,7 +168,8 @@ def resetPassword(request, username):
 			
 def resetPasswordSuccess(request):
 	'''
-	resetPasswordSuccess(request) - Simple handler that renders the success template informing a user that their password has been reset
+	resetPasswordSuccess(request) - Notfies the user that their password has been successfully reset, and that an email containing the new temporary
+	password has been sent to the email associated with the username provided.
 	Parameters:
 		request - an Http Request
 	'''
@@ -172,7 +177,8 @@ def resetPasswordSuccess(request):
 
 def studentRegistration(request):
 	'''
-	studentRegistration(request) - view handler for student registration
+	studentRegistration(request) - Page for student registration. Requires that the student enter all user related information, including 
+	selecting a security question, answer, as well as the institution they are attending. Unlike the instructor, students do not require verification.
 	Arguments:
 	    request - a http request
 	Variables:
@@ -236,7 +242,7 @@ def studentRegistration(request):
 
 def studentRegistrationSuccess(request):
 	'''
-	studentRegistrationSuccess(request) - Simple handler that renders the success template
+	studentRegistrationSuccess(request) - Notifies the student that they have successfully registered, and they can now log in.
 	Parameters:
 		request - an Http Request
 	'''
@@ -244,7 +250,9 @@ def studentRegistrationSuccess(request):
 
 def instructorRegistration(request):
 	'''
-	instructorRegistration(request) - Handler for instructor registration.
+	instructorRegistration(request) - Handles instructor registration. Requires the instructor to enter all user related information,
+	as well as select a security question, answer, and institution. If the instructor's institution is not available, then they
+	can register a new institution
 	Arguments:
 	    request - a http request
 	Variables:
@@ -322,7 +330,8 @@ def instructorRegistration(request):
 
 def instructorRegistrationSuccess(request):
 	'''
-	instructorRegistrationSuccess(request) - Simple handler for rendering the instructor registration success tempaltes
+	instructorRegistrationSuccess(request) - Inform the instructor that they have successfully registered and that they will be notified when
+	their status as a professor at the provided institution has been verified
 	Parameters:
 		request - an Http Request
 	'''
@@ -330,8 +339,8 @@ def instructorRegistrationSuccess(request):
 
 def approvalPending(request):
 	'''
-	approvalPending(request) - handler for rendering the approvalPending template. This is a static page that informs
-	instructors that they cannot log in until their account and status as a professor has been verified.
+	approvalPending(request) - Page that informs instructors that they cannot log in until their 
+	account and status as a professor has been verified.
 	Parameters:	
 		request - an Http Request
 	'''
