@@ -47,10 +47,10 @@
       <div class="panel">
         <fieldset>
           <legend>User Information</legend>
-          <input type="text" placeholder="First Name" name="firstname" value="{{firstname}}" required autofocus/><br/>
-          <input type="text" placeholder="Last Name" name="lastname" value="{{lastname}}" required/><br/>
+          <input type="text" placeholder="First Name" name="firstname" value="{{firstName}}" required autofocus/><br/>
+          <input type="text" placeholder="Last Name" name="lastname" value="{{lastName}}" required/><br/>
           <input type="text" placeholder="Email" name="email" value="{{email}}" required/><br/>
-	        <select name="institution_id">
+	        <select name="institutionID">
 	         {% for entry in institutions %}
 	           <option value="{{entry.id}}">{{ entry.name }}</option>
 	         {% endfor %}
@@ -67,7 +67,7 @@
             <input class="error" type="password" id="pw2" onkeyup="checkPassword(); return false" placeholder="Password" required/> 
 	         <small class="error" id="confirmMessage" style="background-color:#c60f13;">Passwords do not match!</small>
 	         <label>Select a security question for use in password recovery</label> 
-	         <select name="question_id">
+	         <select name="questionID">
          		{% for question in security_questions %}
          			<option value="{{question.0}}">{{question.1}}</option>
          		{% endfor %}

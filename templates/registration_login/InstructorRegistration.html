@@ -50,7 +50,7 @@
         <fieldset>
       	  <legend>Institution Information</legend>
                 <label>Select Institution</label>
-      	  <select name="institution_id">
+      	  <select name="institutionID">
       	    {% for entry in institutions %}
       	      <option value="{{entry.id}}">{{ entry.name }}</option>
       	    {% endfor %}
@@ -59,7 +59,7 @@
       	  <input id="checkbox1" type="checkbox" onClick="enableSchoolFields(this)" name="createSchool" value={{check}}><label for="checkbox1">Add Institution</label>
       	    <fieldset id="schoolfields" disabled>
       	      <legend>New Institution</legend>
-      	      <input type="text" class="form-control" placeholder="Institution Name" name="instname" value="{{instname}}"><br/>
+      	      <input type="text" class="form-control" placeholder="Institution Name" name="instName" value="{{instName}}"><br/>
       	      <input type="text" class="form-control" placeholder="City" name="city" value="{{city}}"><br/>
       	      <input type="text" class="form-control" placeholder="State/Province" name="state" value="{{state}}"><br/>
       	      <input type="text" class="form-control" placeholder="Country" name="country" value="{{country}}" ><br/>
@@ -67,8 +67,8 @@
       	</fieldset>
         <fieldset>
           <legend>User and Account Information</legend>
-          <input type="text" placeholder="First Name" name="firstname" value="{{firstname}}" required autofocus/><br/>
-          <input type="text" placeholder="Last Name" name="lastname" value="{{lastname}}" required/><br/>
+          <input type="text" placeholder="First Name" name="firstName" value="{{firstName}}" required autofocus/><br/>
+          <input type="text" placeholder="Last Name" name="lastName" value="{{lastName}}" required/><br/>
           <input type="text" placeholder="Email" name="email" value="{{email}}" required/><br/>
           {% if message %}
       	    <h4 style="color:red;">{{messageContents}}</h4>
@@ -78,7 +78,17 @@
       	  <label>Re-enter password:</label>
           <input class="error" type="password" id="pw2" onkeyup="checkPassword(); return false" placeholder="Password" required/> 
       	  <small class="error" id="confirmMessage" style="background-color:#c60f13;">Passwords do not match!</small>  
+          <label>Select a security question for use in password recovery</label> 
+           <select name="questionID">
+            {% for question in securityQuestions %}
+              <option value="{{question.0}}">{{question.1}}</option>
+            {% endfor %}
+           </select ><br/><br/>
+           <label>Provide an an answer for the security question above</label>
+           <input type="text" placeholder="Answer" name="answer" value="{{answer}}" required/>
         </fieldset>
+        <label for="reseachApproval">I give permission to use the materials that I collect for research in order to improve the processes and experiences for future students</label>
+         <input id="researchApproval" name="research" value="{{research}}" type="checkbox">
        </div>
       </div>
     </div>

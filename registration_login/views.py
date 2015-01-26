@@ -273,7 +273,7 @@ def instructorRegistration(request):
 	''' 
 	if request.method == 'GET':
 		institutions = Institution.objects.all().order_by('name')
-		security_questions = UserProfile.SECURITY_QUESTIONS()
+		security_questions = UserProfile.SECURITY_QUESTIONS
 		template = loader.get_template('registration_login/instructorRegistration.html')
 		context = RequestContext(request,{'institutions':institutions,
 	                                      'message': False,
@@ -346,7 +346,7 @@ def approvalPending(request):
 	'''
 	#User can't access anything anyways, so log them out out automatically
 	logout(request)
-    return render_to_response('registration_login/approvalPending.html')
+	return render_to_response('registration_login/approvalPending.html')
 
 def loginRedirect(request):
 	'''
