@@ -164,7 +164,7 @@ def resetPassword(request, username):
 			
 def resetPasswordSuccess(request):
 	'''
-	resetPasswordSuccess(request) - Simple handler that renders the success template
+	resetPasswordSuccess(request) - Simple handler that renders the success template informing a user that their password has been reset
 	Parameters:
 		request - an Http Request
 	'''
@@ -172,7 +172,7 @@ def resetPasswordSuccess(request):
 
 def studentRegistration(request):
 	'''
-	studentRegistration(request) - view handler for instructor registration
+	studentRegistration(request) - view handler for student registration
 	Arguments:
 	    request - a http request
 	Variables:
@@ -244,7 +244,7 @@ def studentRegistrationSuccess(request):
 
 def instructorRegistration(request):
 	'''
-	instructorRegistration(request) - view handler for instructor registration
+	instructorRegistration(request) - Handler for instructor registration.
 	Arguments:
 	    request - a http request
 	Variables:
@@ -322,14 +322,39 @@ def instructorRegistration(request):
 
 def instructorRegistrationSuccess(request):
 	'''
-	instructorRegistrationSuccess(request) - Simple handler that renders the success template
+	instructorRegistrationSuccess(request) - Simple handler for rendering the instructor registration success tempaltes
 	Parameters:
 		request - an Http Request
 	'''
-	return render_to_response('registration_login/instructorRegistrationSuccess.html')
+	return render_to_response('registration_login/instructorRegistrationSuccess.html')	
 
+def approvalPending(request):
+	'''
+	approvalPending(request) - handler for rendering the approvalPending template. This is a static page that informs
+	instructors that they cannot log in until their account and status as a professor has been verified.
+	Parameters:	
+		request - an Http Request
+	'''
+	#User can't access anything anyways, so log them out out automatically
+	logout(request)
+    return render_to_response('registration_login/approvalPending.html')
 
+def loginRedirect(request):
+	'''
 
+	'''
+	#make sure a valid user is logged in
+	if request.user.is_authenticated():
+		#redirect the user based on their permissions group
+		if request.user.groups.filter(name='Student').exists():
+			return HttpResponseRedirect('/student/%s/home' % request.user.username)
+		elif request.user.groups.filter(name='instructor').exists():
+			return HttpResponseRedirect('/instructor/%s/home' % request.user.username)
+		elif request.user.groups.filter(name='instructor-pending').exists():
+			return HttpResponseRedirect('approval-pending')
+	#if not, then return them to the home page
+	else:
+		return HttpResponseRedirect('/')
 
 
 
