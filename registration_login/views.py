@@ -303,6 +303,7 @@ def instructorRegistration(request):
 				inst_object.city = request.POST['city']
 				inst_object.state = request.POST['state']
 				inst_object.country = request.POST['country']
+				inst_object.save()
 			else:
 				inst_object = Institution.objects.get(id=request.POST['institutionID'])
 			user.userprofile.institution = inst_object

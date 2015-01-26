@@ -9,31 +9,32 @@
   <!-- Tab title -->
   <title>DLR - Design Learning Repository</title>
 
-  <link rel="stylesheet" type="text/css" href="{% static 'designactivity/foundation.css' %}" />
-  <link rel="stylesheet" type="text/css" href="{% static 'designactivity/normalization.min.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'css/foundation.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'css/normalization.min.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'css/custom.css' %}" />
 
   <!-- Used to handle older browser versions -->
-  <script src="{% static 'designactivity/respond.js' %}"></script>
+  <script src="{% static 'js/respond.js' %}"></script>
 </head>
 <body>
 <!-- Navigation -->
   <nav class="top-bar" data-topbar data-options="is_hover: false"> 
     <ul class="title-area"> 
-      <li class="name"><h1><a href="/dlr/">DLR</a></h1></li> 
+      <li class="name"><h1><a href="/">DLR</a></h1></li> 
       <li class="toggle-topbar menu-icon"><a href=""><span>Menu</span></a></li>
     </ul> 
     <section class="top-bar-section"> 
     <!-- Right Nav Section --> 
       <ul class="right">
-	<li><a href="/dlr/overview">Return to Overview</a></li>  
+	<li><a href="/">Return to Overview</a></li>  
         <li class="has-dropdown">
           <a href="#">Sign up</a> 
             <ul class="dropdown"> 
-               <li><a href="/dlr/instructor-signup">Instructors Start Here!</a></li>
-               <li><a href="/dlr/student-signup">Students Start Here!</a></li> 
+               <li><a href="/instructor-registration">Instructors Start Here!</a></li>
+               <li><a href="/student-registration">Students Start Here!</a></li> 
             </ul> 
         </li>
-	<li><a href="/dlr/login">Login</a></li> 
+	<li><a href="/login">Login</a></li> 
       </ul> 
     </section> 
   </nav>
@@ -41,7 +42,7 @@
   <div class="container" style="text-align:center;">
     <h1>Registration Successful!</h1>
     <p>An email will be sent to you when we have verified your status as an instructor at the institution provided.</p>
-    <a href="/dlr/overview" class="button">Return to overview</a>
+    <a href="/" class="button">Return to overview</a>
   </div>
   <div class="push"></div>
  </div>
@@ -50,5 +51,11 @@
      <p style="color:white;">&copy; Northern Arizona University 2013</p>
    </div>
  </div>
+ <!-- javascript -->
+  <script src="{% static 'js/jquery.js' %}"></script>
+  <script src="{% static 'js/foundation.min.js' %}"></script>
+  <script type="text/javascript">
+    $(document).foundation();
+  </script>
 </body>
 </html>
