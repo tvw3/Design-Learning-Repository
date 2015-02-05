@@ -24,6 +24,9 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     BASE_DIR + '/static/',
 )
+
+#url for login, used in redirecting if a user is not logged in
+LOGIN_URL = '/login'
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 

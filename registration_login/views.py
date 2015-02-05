@@ -7,6 +7,7 @@ from django.core.mail import send_mail
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User, Group
+from django.contrib.auth.decorators import login_required
 
 from django.http import HttpResponse, HttpResponseRedirect
 
@@ -349,6 +350,8 @@ def approvalPending(request):
 	logout(request)
 	return render_to_response('registration_login/approvalPending.html')
 
+
+@login_required()
 def loginRedirect(request):
 	'''
 	loginRedirect(request) - redirects the user to the proper home page based on user permission. If the
@@ -356,18 +359,13 @@ def loginRedirect(request):
 	Parameters:
 		request - an Http request
 	'''
-	#make sure a valid user is logged in
-	if request.user.is_authenticated():
-		#redirect the user based on their permissions group
-		if request.user.groups.filter(name='Student').exists():
-			return HttpResponseRedirect('/student/%s/home' % request.user.username)
-		elif request.user.groups.filter(name='instructor').exists():
-			return HttpResponseRedirect('/instructor/%s/home' % request.user.username)
-		elif request.user.groups.filter(name='instructor-pending').exists():
-			return HttpResponseRedirect('approval-pending')
-	#if not, then return them to the home page
-	else:
-		return HttpResponseRedirect('/')
+	#redirect the user based on their permissions group
+	if request.user.groups.filter(name='Student').exists():
+		return HttpResponseRedirect('/student/%s/home' % request.user.username)
+	elif request.user.groups.filter(name='instructor').exists():
+		return HttpResponseRedirect('/instructor/%s/home' % request.user.username)
+	elif request.user.groups.filter(name='instructor-pending').exists():
+		return HttpResponseRedirect('/approval-pending')
 
 
 

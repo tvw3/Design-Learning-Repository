@@ -1,5 +1,10 @@
 from django.db import models
+
 from django.utils import timezone
+
+from django.contrib.auth.models import User
+
+from registration_login.models import Institution
 
 class Course(models.Model):
     #ie cs249, cs386
