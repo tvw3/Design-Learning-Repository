@@ -1,6 +1,4 @@
-CURRENT MODULE: COURSE
-	current task: create db models for a course
-	future tasks: build course handlers and templates
+
 ...
 Once all apps are completed, make changes for production.
 The following list is what has been recognized as requiring changes so far:

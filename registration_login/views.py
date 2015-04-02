@@ -34,7 +34,7 @@ def user_login(request):
     :return: Either the form with applicable error messages, or sends the user to the redirect handler
     """
     if request.method == 'GET':
-        template = loader.get_template('registration_login/login.html')
+        template = loader.get_template('registration_login/Login.html')
         context = RequestContext(
             request,
             {'message': False,
@@ -67,7 +67,7 @@ def user_login(request):
                 request,
                 {'message': True,
                  'messageContents': 'Invalid username or password. Please try again',
-                 'csrf_token':csrf(request),})
+                 'csrf_token': csrf(request)})
             return HttpResponse(template.render(context))
 
 
@@ -270,7 +270,7 @@ def instructor_registration(request):
             group.user_set.add(user)
             user.save()
             # set institution, if the instructor is adding a new one, then create the institution first before adding
-            # check to make sure that the add institutio checkbox was checked
+            # check to make sure that the add institution checkbox was checked
             if 'createSchool' in request.POST:
                 inst_object = Institution()
                 inst_object.name = request.POST['instName']
