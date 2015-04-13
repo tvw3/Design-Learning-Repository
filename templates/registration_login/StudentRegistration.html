@@ -32,7 +32,7 @@
 	         <small class="error" id="confirmMessage" style="background-color:#c60f13;">Passwords do not match!</small>
 	         <label>Select a security question for use in password recovery</label> 
 	         <select name="questionID">
-         		{% for question in security_questions %}
+         		{% for question in securityQuestions %}
          			<option value="{{question.0}}">{{question.1}}</option>
          		{% endfor %}
 	         </select ><br/><br/>

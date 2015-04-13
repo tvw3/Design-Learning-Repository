@@ -189,9 +189,21 @@ def student_registration(request):
              'securityQuestions': security_questions,})
         return HttpResponse(template.render(context))
     elif request.method == 'POST':
+        # Verify that a user with that username does not already exist.
         try:
             # Use form inputs to create a new User
             user = User.objects.create_user(request.POST['username'],request.POST['email'],request.POST['pwd'])
+        except IntegrityError as e:
+            institutions = Institution.objects.all().order_by('name')
+            template = loader.get_template('registration_login/studentRegistration.html')
+            context = RequestContext(
+                request,
+                {'institutions': institutions,
+                 'message': True,
+                 'messageContents': 'Username already in use',
+                 'csrf_token': csrf(request)})
+            return HttpResponse(template.render(context))
+        else:
             # Fill out the rest of the attributes
             user.last_name = request.POST['lastName']
             user.first_name = request.POST['firstName']
@@ -212,16 +224,6 @@ def student_registration(request):
             user.userprofile.save()
             return HttpResponseRedirect('/student-registration-success')
             # username entered is already in use
-        except IntegrityError as e:
-            institutions = Institution.objects.all().order_by('name')
-            template = loader.get_template('registration_login/studentRegistration.html')
-            context = RequestContext(
-                request,
-                {'institutions': institutions,
-                 'message': True,
-                 'messageContents': 'Username already in use',
-                 'csrf_token': csrf(request)})
-            return HttpResponse(template.render(context))
 
 
 def student_registration_success(request):
@@ -261,6 +263,19 @@ def instructor_registration(request):
                 request.POST['username'],
                 request.POST['email'],
                 request.POST['pwd'])
+        except IntegrityError as e:
+            institutions = Institution.objects.all().order_by('name')
+            security_questions = UserProfile.SECURITY_QUESTIONS()
+            template = loader.get_template('registration_login/instructorRegistration.html')
+            context = RequestContext(
+                request,
+                {'institutions': institutions,
+                 'message': True,
+                 'messageContents': 'Username already in use',
+                 'csrf_token': csrf(request),
+                 'securityQuestions': security_questions})
+            return HttpResponse(template.render(context))
+        else:
             # set the rest of the user's information
             user.first_name = request.POST['firstName']
             user.last_name = request.POST['lastName']
@@ -292,18 +307,7 @@ def instructor_registration(request):
                 user.userprofile.permission_granted = False
             user.userprofile.save()
             return HttpResponseRedirect('/instructor-registration-success')
-        except IntegrityError as e:
-            institutions = Institution.objects.all().order_by('name')
-            security_questions = UserProfile.SECURITY_QUESTIONS()
-            template = loader.get_template('registration_login/instructorRegistration.html')
-            context = RequestContext(
-                request,
-                {'institutions': institutions,
-                 'message': True,
-                 'messageContents': 'Username already in use',
-                 'csrf_token': csrf(request),
-                 'securityQuestions': security_questions})
-            return HttpResponse(template.render(context))
+
 
 
 def instructor_registration_success(request):
